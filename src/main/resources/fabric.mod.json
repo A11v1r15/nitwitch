@@ -32,6 +32,7 @@
 			"io.github.A11v1r15.nitwitch.Nitwitch"
 		],
 		"client": [
+			"io.github.A11v1r15.nitwitch.NitwitchClient"
 		]
 	}
 }

@@ -1,6 +1,7 @@
 package io.github.A11v1r15.nitwitch.mixin;
 
 import io.github.A11v1r15.nitwitch.NitwitchModEntityTypeIds;
+import io.github.A11v1r15.nitwitch.NitwitchModEntityTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LightningBolt;
@@ -23,7 +24,9 @@ public abstract class VillagerEntityMixin {
 	@ModifyVariable(method = "thunderHit(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LightningBolt;)V", at = @At("STORE"), ordinal = 0)
 		private Witch nitwitch$changeThunderHit(Witch x, ServerLevel serverLevel, LightningBolt lightningBolt) {
 			VillagerProfession profession = this.getVillagerData().getProfession();
-			x.setCustomName(Component.literal("This used to be a " + profession.name()));
+		if (profession.equals(VillagerProfession.NITWIT))
+			x = NitwitchModEntityTypes.NITWITCH.create(serverLevel);
+			//x.setCustomName(Component.literal("This used to be a " + profession.name()));
 			return x;
 		}
 }

@@ -1,19 +1,18 @@
 <!--suppress HtmlDeprecatedTag, XmlDeprecatedElement -->
-<center><img alt="mod preview" src="https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png"/></center>
+<center><img alt="mod icon" src="src\main\resources\assets\nitwitch\icon.png"/></center>
 
 <center>
-A short quick summary of this mod
+Adds a variety of mob variations for Minecraft
 </center>
 
 ---
 
-A long description of your mod, including 
-- Dot point lists of all features
+Altough the titular mob is the Nitwitch, it'll not be the only mob added, I'll add Zombie Villager variants and other mobs as well. With that said:
 
-`path/to/config/files` if you have them
-
-Screenshots of features where possible
-
----
-
-A footnote for special thanks, credits, and other shoutouts - including "created at modfest" banners.
+<h3>Nitwitch</h3>
+<ul>
+  <li>That's what happens when a Nitwit villager gets hit with a lightning</li>
+  <li>They're pacific and won't be attacked by Iron Golems</li>
+  <li>They'll try to heal players and Villagers with their Amethist Shard</li>
+  <li>They bring good luck</li>
+</ul> 

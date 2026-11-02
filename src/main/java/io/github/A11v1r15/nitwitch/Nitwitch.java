@@ -1,8 +1,6 @@
 package io.github.A11v1r15.nitwitch;
 
-import io.github.A11v1r15.nitwitch.render.TheNitwitchRenderer;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

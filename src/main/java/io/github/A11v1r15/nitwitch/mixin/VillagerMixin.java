@@ -22,9 +22,9 @@ import static io.github.A11v1r15.nitwitch.Nitwitch.LOGGER;
 
 
 @Mixin(Villager.class)
-public abstract class VillagerEntityMixin extends AbstractVillager {
+public abstract class VillagerMixin extends AbstractVillager {
 
-	public VillagerEntityMixin(EntityType<? extends AbstractVillager> entityType, Level level) {
+	public VillagerMixin(EntityType<? extends AbstractVillager> entityType, Level level) {
 		super(entityType, level);
 	}
 
@@ -35,7 +35,11 @@ public abstract class VillagerEntityMixin extends AbstractVillager {
 	@Shadow
 	private GossipContainer getGossips() {return null;};
 
-	@Inject(method = "thunderHit(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LightningBolt;)V", at = @At("HEAD"), cancellable = true)
+	@Inject(
+		method = "thunderHit",
+		at = @At("HEAD"),
+		cancellable = true
+	)
 	private void nitwitch$changeThunderHit(ServerLevel serverLevel, LightningBolt lightningBolt, CallbackInfo ci) {
 		VillagerProfession profession = this.getVillagerData().getProfession();
 		TheNitwitch nitwitch = null;

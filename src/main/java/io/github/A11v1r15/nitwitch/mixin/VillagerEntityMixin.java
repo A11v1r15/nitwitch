@@ -5,7 +5,6 @@ import io.github.A11v1r15.nitwitch.mobs.TheNitwitch;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -15,6 +14,9 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static io.github.A11v1r15.nitwitch.Nitwitch.LOGGER;
 
@@ -33,36 +35,30 @@ public abstract class VillagerEntityMixin extends AbstractVillager {
 	@Shadow
 	private GossipContainer getGossips() {return null;};
 
-	@Override
-	public void thunderHit(ServerLevel serverLevel, LightningBolt lightningBolt) {
-		PathfinderMob witch = null;
+	@Inject(method = "thunderHit(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LightningBolt;)V", at = @At("HEAD"), cancellable = true)
+	private void nitwitch$changeThunderHit(ServerLevel serverLevel, LightningBolt lightningBolt, CallbackInfo ci) {
 		VillagerProfession profession = this.getVillagerData().getProfession();
+		TheNitwitch nitwitch = null;
 		if (profession.equals(VillagerProfession.NITWIT)) {
-			witch = NitwitchModEntityTypes.NITWITCH.create(serverLevel);
-		} else if (serverLevel.getDifficulty() != Difficulty.PEACEFUL) {
-			witch = EntityType.WITCH.create(serverLevel);
+			nitwitch = NitwitchModEntityTypes.NITWITCH.create(serverLevel);
 		}
-		if (witch != null) {
+		if (nitwitch != null) {
 			LOGGER.info("Villager {} was struck by lightning {}.", this, lightningBolt);
-			witch.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
-			witch.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(witch.blockPosition()), MobSpawnType.CONVERSION, (SpawnGroupData)null);
-			witch.setNoAi(this.isNoAi());
+			nitwitch.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
+			nitwitch.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(nitwitch.blockPosition()), MobSpawnType.CONVERSION, (SpawnGroupData)null);
+			nitwitch.setNoAi(this.isNoAi());
 			if (this.hasCustomName()) {
-				witch.setCustomName(this.getCustomName());
-				witch.setCustomNameVisible(this.isCustomNameVisible());
+				nitwitch.setCustomName(this.getCustomName());
+				nitwitch.setCustomNameVisible(this.isCustomNameVisible());
 			}
-			witch.setPersistenceRequired();
-			serverLevel.addFreshEntityWithPassengers(witch);
-
-			if (witch instanceof TheNitwitch nitwitch){
-				nitwitch.setVillagerData(this.getVillagerData());
-				nitwitch.setGossips((Tag)this.getGossips().store(NbtOps.INSTANCE));
-			}
+			nitwitch.setPersistenceRequired();
+			serverLevel.addFreshEntityWithPassengers(nitwitch);
+			nitwitch.setVillagerData(this.getVillagerData());
+			nitwitch.setGossips((Tag)this.getGossips().store(NbtOps.INSTANCE));
 
 			this.releaseAllPois();
 			this.discard();
-		} else {
-			super.thunderHit(serverLevel, lightningBolt);
+			ci.cancel();
 		}
 	}
 }
